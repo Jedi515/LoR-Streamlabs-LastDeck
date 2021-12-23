@@ -1,0 +1,38 @@
+{
+	"output_file": "settings.json",
+	"DeckMessage": {
+		"type": "textbox",
+		"value": "$deck",
+		"label": "Command message",
+		"tooltip": "Message the bot will send to anyone the command is used.\r\nAvailable parameters:\r\n  $deck\r\n  $cooldown",
+		"group": "General"
+	},
+	"Commands": {
+		"type": "textbox",
+		"value": "!deck",
+		"label": "Commands",
+		"tooltip": "Words the bot will be looking for, leave a space between each word to add more.",
+		"group": "General"
+	},
+	"PUUID": {
+		"type": "textbox",
+		"value": "",
+		"label": "PUUID",
+		"tooltip": "Your Riot Games PUUID.",
+		"group": "General"
+	},
+	"RIOT_API": {
+		"type": "textbox",
+		"value": "",
+		"label": "Riot API key",
+		"tooltip": "Your Riot Games API key. Do not give it to anyone you don't trust.",
+		"group": "General"
+	},
+	"COOLDOWN": {
+		"type": "numberbox",
+		"value": 30,
+		"label": "Cooldown",
+		"tooltip": "How often request is called instead of sending cached value. Only really matters if the command is called more than 200 times in 2 minutes.",
+		"group": "General"
+	}
+}
