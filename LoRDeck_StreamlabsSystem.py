@@ -1,13 +1,12 @@
 import json
 import os
-import re
 import codecs
 import datetime
 
 ScriptName = "LoR deck"
 Website = "https://www.twitch.tv/jedi515"
 Creator = "Jedi515"
-Version = "1.0.3"
+Version = "1.0.4"
 Description = "Shows your last lor deck."
 
 headers = {
@@ -29,11 +28,18 @@ class Settings:
     def __init__(self, settings_file=None):
         with codecs.open(settings_file, encoding='utf-8-sig', mode='r') as f:
             self.__dict__ = json.load(f, encoding='utf-8-sig')
+            self.PUUID = ""
 
 
 def Init():
     global SETTINGS, history_rq_line, last_match_line
     SETTINGS = Settings(settingsFile)
+    SETTINGS.PUUID = json.loads(json.loads(Parent.GetRequest(
+        "https://europe.api.riotgames.com/riot/account/v1/accounts/by-riot-id/$name/$tag?api_key=$api_key"
+            .replace("$name", SETTINGS.RIOT_NAME)
+            .replace("$tag", SETTINGS.RIOT_TAG).replace("$api_key", SETTINGS.RIOT_API), headers)) \
+                                .get("response")) \
+        .get("puuid")
     history_rq_line = history_rq_line.replace("$api_key", SETTINGS.RIOT_API).replace("$puuid", SETTINGS.PUUID)
     last_match_line = last_match_line.replace("$api_key", SETTINGS.RIOT_API)
     pass
@@ -46,15 +52,19 @@ def Execute(data):
         timediff = (request_time - last_requested).total_seconds()
         if timediff > SETTINGS.COOLDOWN:
             last_requested = request_time
-            _ = json.loads(Parent.GetRequest(history_rq_line, headers)).get("response").replace('"', '').replace('[', '').replace(']', '').split(',')
+            _ = json.loads(Parent.GetRequest(history_rq_line, headers)).get("response").replace('"', '').replace('[',
+                                                                                                                 '').replace(
+                ']', '').split(',')
             if request_matches_history != _:
                 request_matches_history = _
-                last_match_request = json.loads(json.loads(Parent.GetRequest(last_match_line.replace("{matchID}", _[0]), headers)).get("response"))
+                last_match_request = json.loads(
+                    json.loads(Parent.GetRequest(last_match_line.replace("{matchID}", _[0]), headers)).get("response"))
                 for side in last_match_request.get("info").get("players"):
                     if side.get("puuid") == SETTINGS.PUUID:
                         last_deck = side.get("deck_code")
 
-        Parent.SendStreamMessage(SETTINGS.DeckMessage.replace("$deck", last_deck).replace("$cooldown", str(int(timediff))))
+        Parent.SendStreamMessage(
+            SETTINGS.DeckMessage.replace("$deck", last_deck).replace("$cooldown", str(int(timediff))))
 
 
 def Tick():

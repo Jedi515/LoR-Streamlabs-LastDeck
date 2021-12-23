@@ -14,11 +14,18 @@
 		"tooltip": "Words the bot will be looking for, leave a space between each word to add more.",
 		"group": "General"
 	},
-	"PUUID": {
+	"RIOT_TAG": {
 		"type": "textbox",
 		"value": "",
-		"label": "PUUID",
-		"tooltip": "Your Riot Games PUUID.",
+		"label": "Riot Tag",
+		"tooltip": "Your Riot Games tag (what comes after # sign).",
+		"group": "General"
+	},
+	"RIOT_NAME": {
+		"type": "textbox",
+		"value": "",
+		"label": "Riot nickname",
+		"tooltip": "Your riot games nickname (what comes before # sign).",
 		"group": "General"
 	},
 	"RIOT_API": {
@@ -30,7 +37,7 @@
 	},
 	"COOLDOWN": {
 		"type": "numberbox",
-		"value": 30,
+		"value": 10,
 		"label": "Cooldown",
 		"tooltip": "How often request is called instead of sending cached value. Only really matters if the command is called more than 200 times in 2 minutes.",
 		"group": "General"
